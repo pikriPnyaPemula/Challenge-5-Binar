@@ -85,9 +85,6 @@ paths:
                       data:
                         $ref: "#/components/schemas/UsersModel"
                         
-      security:
-      - bearerAuth: []
-                        
       
 
   /users:
@@ -195,7 +192,7 @@ paths:
         $ref: '#/components/requestBodies/updateUsers'
       responses:
         "200":
-          description: Profil berhasil diperbarui
+          description: Succeed Update!
           content:
             application/json:
               schema:
@@ -302,7 +299,7 @@ paths:
         $ref: '#/components/requestBodies/updateProfiles'
       responses:
         "200":
-          description: Successfully Update Profiles!
+          description: Succeed Update!
           content:
             application/json:
               schema:
@@ -548,13 +545,6 @@ paths:
                         
           
 components:
-  securitySchemes:
-    bearerAuth:            # arbitrary name for the security scheme
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-
-
   schemas:
     BasicResponse:
       title: BasicResponse

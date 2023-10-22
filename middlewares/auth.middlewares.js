@@ -15,7 +15,6 @@ module.exports = {
             });
         }
 
-        // let token = authorization.split(" ")[1];
         jwt.verify(authorization, JWT_SECRET_KEY, async (err, encoded) => {
             if(err){
                 return res.status(401).json({
