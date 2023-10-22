@@ -1,0 +1,82 @@
+### Membuat User beserta dengan Profile nya
+POST http://localhost:3000/api/v1/users
+Content-Type: application/json
+
+{
+    "name": "Mutiara",
+    "email": "mutiara@mail.com",
+    "password": "mutiara123",
+    "identity_type": "Virtual",
+    "identity_number": 274818,
+    "address": "Makassar"
+}
+
+### Menampilkan Semua User dengan Pagination
+GET http://localhost:3000/api/v1/users?limit=15&page=1
+Content-Type: application/json
+
+### Menampilkan Detail User dengan ID beserta dengan profile nya
+GET http://localhost:3000/api/v1/users/1
+
+
+
+### Membuat Akun Baru dengan User yang sudah terdaftar
+POST http://localhost:3000/api/v1/accounts
+Content-Type: application/json
+
+{
+    "bank_name": "Mandiri",
+    "bank_account_number": 912305,
+    "balance": 2500000,
+    "user_id": 6
+}
+
+### Menampilkan Semua Akun
+GET http://localhost:3000/api/v1/account?limit=20&page=1
+
+### Menampilkan detail Akun beserta User dan Profilenya
+GET http://localhost:3000/api/v1/account/2
+
+
+
+### Membuat Transaksi
+POST http://localhost:3000/api/v1/transaction
+Content-Type: application/json
+
+{
+  "source_account_id": 1,
+  "destination_account_id": 3,
+  "amount": 1000000
+}
+
+### Menampilkan Semua Transaction
+GET http://localhost:3000/api/v1/transaction?limit=20&page=1
+
+### Menampilkan detail Transaction
+GET http://localhost:3000/api/v1/transaction/1
+
+
+
+### Register akun
+POST http://localhost:3000/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "name": "deden",
+  "email": "deden@gmail.com",
+  "password": "deden123",
+  "password_confirmation": "deden12"
+}
+
+### Login Akun
+POST http://localhost:3000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "deden@gmail.com",
+  "password": "deden123"
+}
+
+### JWT Token
+GET http://localhost:3000/api/v1/auth/whoami
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjk3NzM3NjI3fQ.xLVJCUs8fEY-lU8-WgxL7FdWMdCPu1ycmbxgTdmQCA8

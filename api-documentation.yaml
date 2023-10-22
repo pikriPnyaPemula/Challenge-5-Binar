@@ -1,0 +1,855 @@
+openapi: 3.0.3
+info:
+  title: Banking System API Documentation
+  description: |-
+    Banking System API adalah sistem layanan web yang dirancang untuk mendukung operasi perbankan seperti manajemen akun pengguna, transfer dana antar akun, pemeriksaan saldo, dan lainnya. API ini memberikan akses ke berbagai fitur dan fungsionalitas yang memungkinkan bank, pengembang aplikasi, dan pengguna akhir untuk berinteraksi dengan data perbankan secara programatik.
+  contact:
+    email: messi.ronaldo@gmail.com
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api/v1
+tags:
+  - name: Auth
+    description: auth process
+  - name: Users
+    description: users process
+  - name: Profiles
+    description: profiles process
+  - name: Accounts
+    description: accounts process
+  - name: Transactions
+    description: transactions process
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      operationId: post-auth-register
+      summary: Register new users
+      description: Register new users
+      requestBody:
+            $ref: '#/components/requestBodies/createRegister'
+      responses: 
+        "201":
+          description: Created!
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BasicResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/RegisterModel'
+                        
+    
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      operationId: post-auth-login
+      summary: Login users
+      description: Login users
+      requestBody:
+            $ref: '#/components/requestBodies/createLogin'
+      responses: 
+        "201":
+          description: Login Succeed!.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BasicResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/LoginModel'
+                        
+  /auth/whoami:
+    get:
+      tags:
+        - Auth
+      operationId: get-fetch-whoami
+      summary: Get Whoami
+      description: Retrieves details of a specific users.
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/UsersModel"
+                        
+      security:
+      - bearerAuth: []
+                        
+      
+
+  /users:
+    post:
+      tags:
+        - Users
+      operationId: post-create-new-users
+      summary: Create a new users
+      description: Create a new users with the provided information.
+      requestBody:
+        $ref: '#/components/requestBodies/createUsers'
+      responses:
+        "201":
+          description: Succesfull users creation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BasicResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/UsersModel'
+    
+    get:
+      tags:
+        - Users
+      operationId: get-fetch-all-users
+      summary: Get all users
+      description: Retrieves a list of all registered users.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: false
+          description: Page number for pagination.
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          required: false
+          description: Number of items per page.
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          pagination:
+                            $ref: "#/components/schemas/Pagination"
+                          users:
+                            type: array
+                            items:
+                              $ref: "#/components/schemas/UsersModel"
+      
+  "/users/{userId}":
+    get:
+      tags:
+        - Users
+      operationId: get-fetch-users-detail
+      summary: Get users details
+      description: Retrieves details of a specific users.
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: The ID of the user to retrieve.
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/UsersModel"
+                        
+    put:
+      tags:
+        - Users
+      operationId: put-update-users
+      summary: Update users details
+      description: Updates details of a specific users.
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: The ID of the users to update.
+      requestBody:
+        $ref: '#/components/requestBodies/updateUsers'
+      responses:
+        "200":
+          description: Profil berhasil diperbarui
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        
+    delete:
+      tags:
+        - Users
+      operationId: delete-remove-users
+      summary: Delete users
+      description: Deletes a specific users.
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: The ID of the user to delete.
+      responses:
+        "200":
+          description: Successful users deletion
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null                    
+                        
+          
+          
+  /profiles:
+    post:
+      tags:
+        - Profiles
+      operationId: post-create-new-profiles
+      summary: Create a new profiles
+      description: Create a new profiles with the provided information.
+      requestBody:
+        $ref: '#/components/requestBodies/createProfiles'
+      responses:
+        "201":
+          description: Succesfull profiles creation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BasicResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/ProfilesModel'
+  
+      
+  "/profiles/{profilesId}":
+    get:
+      tags:
+        - Profiles
+      operationId: get-fetch-profiles-detail
+      summary: Get Profiles details
+      description: Retrieves details of a specific profiles.
+      parameters:
+        - in: path
+          name: profilesId
+          schema:
+            type: integer
+          required: true
+          description: The ID of the profiles to retrieve.
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/ProfilesModel"
+                        
+    put:
+      tags:
+        - Profiles
+      operationId: put-update-profiles
+      summary: Update profiles details
+      description: Updates details of a specific profiles.
+      parameters:
+        - in: path
+          name: profilesId
+          schema:
+            type: integer
+          required: true
+          description: The ID of the profiles to update.
+      requestBody:
+        $ref: '#/components/requestBodies/updateProfiles'
+      responses:
+        "200":
+          description: Successfully Update Profiles!
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+
+                        
+  /accounts:
+    post:
+      tags:
+        - Accounts
+      operationId: post-create-new-accounts
+      summary: Create a new accounts
+      description: Create a new accounts with the provided information.
+      requestBody:
+        $ref: '#/components/requestBodies/createAccounts'
+      responses:
+        "201":
+          description: Succesfull accounts creation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BasicResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/AccountsModel'
+    
+    get:
+      tags:
+        - Accounts
+      operationId: get-fetch-all-accounts
+      summary: Get all accounts
+      description: Retrieves a list of all registered accounts.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: false
+          description: Page number for pagination.
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          required: false
+          description: Number of items per page.
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          pagination:
+                            $ref: "#/components/schemas/Pagination"
+                          users:
+                            type: array
+                            items:
+                              $ref: "#/components/schemas/AccountsModel"
+      
+  "/accounts/{accountId}":
+    get:
+      tags:
+        - Accounts
+      operationId: get-fetch-accounts-detail
+      summary: Get accounts details
+      description: Retrieves details of a specific accounts.
+      parameters:
+        - in: path
+          name: accountId
+          schema:
+            type: integer
+          required: true
+          description: The ID of the accounts retrieve.
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/AccountsModel"
+                        
+    put:
+      tags:
+        - Accounts
+      operationId: put-update-accounts
+      summary: Update accounts details
+      description: Updates details of a specific users.
+      parameters:
+        - in: path
+          name: accountId
+          schema:
+            type: integer
+          required: true
+          description: The ID of the users to update.
+      requestBody:
+        $ref: '#/components/requestBodies/updateAccounts'
+      responses:
+        "200":
+          description: Profil berhasil diperbarui
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        
+    delete:
+      tags:
+        - Accounts
+      operationId: delete-remove-account
+      summary: Delete accounts
+      description: Deletes a specific accounts
+      parameters:
+        - in: path
+          name: accountId
+          schema:
+            type: integer
+          required: true
+          description: The ID of the acoounts delete.
+      responses:
+        "200":
+          description: Successful accounts deletion
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        example: null
+                        
+                        
+  /transactions:
+    post:
+      tags:
+        - Transactions
+      operationId: post-create-new-transactions
+      summary: Create a new transactions
+      description: Create a new transactions with the provided information.
+      requestBody:
+        $ref: '#/components/requestBodies/createTransactions'
+      responses:
+        "201":
+          description: Succesfull transactions creation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BasicResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/TransactionsModel'
+    
+    get:
+      tags:
+        - Transactions
+      operationId: get-fetch-all-transactions
+      summary: Get all transactions
+      description: Retrieves a list of all registered transactions.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: false
+          description: Page number for pagination.
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          required: false
+          description: Number of items per page.
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          pagination:
+                            $ref: "#/components/schemas/Pagination"
+                          users:
+                            type: array
+                            items:
+                              $ref: "#/components/schemas/TransactionsModel"
+      
+  "/transactions/{transactionId}":
+    get:
+      tags:
+        - Transactions
+      operationId: get-fetch-transactions-detail
+      summary: Get transactions details
+      description: Retrieves details of a specific transactions.
+      parameters:
+        - in: path
+          name: transactionId
+          schema:
+            type: integer
+          required: true
+          description: The ID of the transaction retrieve.
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/BasicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/TransactionsModel"
+                        
+          
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+
+  schemas:
+    BasicResponse:
+      title: BasicResponse
+      type: object
+      properties:
+        status:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "success"
+   
+    LoginModel:
+      title: Login
+      type: object
+      properties:
+        email:
+          type: string
+          example: "messi@gmail.com"
+        password:
+          type: string
+          example: "messi123"
+          
+    RegisterModel:
+      title: Register
+      type: object
+      properties:
+        name:
+          type: string
+          example: "messi"
+        email:
+          type: string
+          example: "messi@gmail.com"
+        password:
+          type: string
+          example: "messi123"
+        password_confirmation:
+          type: string
+          example: "messi123"
+          
+    UsersModel:
+      title: Users
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "messi"
+        email:
+          type: string
+          example: "messi@gmail.com"
+        password:
+          type: string
+          example: "messi123"
+    ProfilesModel:
+      title: Profiles
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        user_id:
+          type: integer
+          example: 1
+        identity_type:
+          type: string
+          example: "Virtual"
+        identity_number:
+          type: string
+          example: "861520"
+        address:
+          type: string
+          example: "Cianjur"
+    AccountsModel:
+      title: Accounts
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        user_id:
+          type: integer
+          example: 1
+        bank_name:
+          type: string
+          example: "Mandiri"
+        bank_account_number:
+          type: string
+          example: "961744"
+        balance:
+          type: number
+          example: 2500000
+    TransactionsModel:
+      title: Transactions
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        source_account_id:
+          type: integer
+          example: 1
+        destination_account_id:
+          type: integer
+          example: 2
+        amount:
+          type: number
+          example: 1500000
+    Pagination:
+      title: Pagination
+      type: object
+      properties:
+        links:
+          type: object
+          properties:
+            next:
+              type: string
+              example: "https://domain.com/users?page=3&limit=5"
+            prev:
+              type: string
+              example: "https://domain.com/users?page=1&limit=5"
+        total_items:
+          type: integer
+          example: 20
+  requestBodies:
+    createRegister:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "messi"
+                email:
+                  type: string
+                  example: "messi@gmail.com"
+                password:
+                  type: string
+                  example: "messi123"
+                password_confirmation:
+                  type: string
+                  example: "messi123"
+                  
+    createLogin:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "messi@gmail.com"
+                password:
+                  type: string
+                  example: "messi123"
+  
+    createUsers:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "messi"
+                email:
+                  type: string
+                  example: "messi@gmail.com"
+                password:
+                  type: string
+                  example: "messi123"
+                  
+    updateUsers:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "messi"
+                email:
+                  type: string
+                  example: "messi@gmail.com"
+                password:
+                  type: string
+                  example: "messi123"
+                  
+    createProfiles:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  example: 1
+                identity_type:
+                  type: string
+                  example: "Virtual"
+                identity_number:
+                  type: string
+                  example: "961744"
+                address:
+                  type: string
+                  example: "Cianjur"
+                  
+    updateProfiles:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  example: 1
+                identity_type:
+                  type: string
+                  example: "Virtual"
+                identity_number:
+                  type: string
+                  example: "961744"
+                address:
+                  type: string
+                  example: "Cianjur"
+                  
+    createAccounts:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  example: 1
+                bank_name:
+                  type: string
+                  example: "mandiri"
+                bank_account_number:
+                  type: string
+                  example: "961744"
+                balance:
+                  type: number
+                  example: 2500000
+                  
+    updateAccounts:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  example: 1
+                bank_name:
+                  type: string
+                  example: "Mandiri"
+                bank_account_number:
+                  type: string
+                  example: "961744"
+                balance:
+                  type: number
+                  example: 2500000
+                  
+    createTransactions:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                source_account_id:
+                  type: integer
+                  example: 1
+                destination_account_id:
+                  type: integer
+                  example: 2
+                amount:
+                  type: number
+                  example: 150000
+                  
+    updateTransactions:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                source_account_id:
+                  type: integer
+                  example: 1
+                destination_account_id:
+                  type: integer
+                  example: 2
+                amount:
+                  type: number
+                  example: 150000  

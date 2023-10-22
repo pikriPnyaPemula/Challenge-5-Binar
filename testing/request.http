@@ -1,0 +1,58 @@
+### Testing Membuat User beserta dengan Profilenya
+POST http://localhost:3000/api/v1/users
+Content-Type: application/json
+
+{
+    "name": "syofian",
+    "email": "syofian@mail.com",
+    "password": "syofian123",
+    "identity_type": "Virtual",
+    "identity_number": 905150,
+    "address": "Lampung"
+}
+
+### Testing Melihat daftar user dari id beserta profilenya
+GET http://localhost:3000/api/v1/users/7
+Content-Type: application/json
+
+### Testing Melihat semua id beserta profilenya
+GET http://localhost:3000/api/v1/users
+
+
+
+### Testing Membuat Account
+POST http://localhost:3000/api/v1/accounts
+Content-Type: application/json
+
+{
+    "bank_name": "Sinarmas",
+    "bank_account_number": 975123,
+    "balance": 1000000,
+    "user_id": 6
+}
+
+### Testing melihat daftar Account dari id beserta dengan user dan profilenya
+GET http://localhost:3000/api/v1/accounts/2
+Content-Type: application/json
+
+### Testing melihat semua daftar Account
+GET http://localhost:3000/api/v1/accounts
+
+
+### Testing membuat transactions
+POST http://localhost:3000/api/v1/transactions
+Content-Type: application/json
+
+{
+    "source_account_id": 2,
+    "destination_account_id": 1,
+    "amount": 1000000
+}
+
+### Testing melihat daftar transaction dari id
+GET http://localhost:3000/api/v1/transactions/1
+Content-Type: application/json
+
+### Testing melihat semua daftar transaction
+GET http://localhost:3000/api/v1/transactions
+Content-Type: application/json
